@@ -1,0 +1,242 @@
+Q. We provide you with expressions containing +,-,*,^, / and parenthesis. None of the numbers in the expression involved will exceed .
+Your task is to evaluate the expression and display the correct output rounding upto  decimal places 999.
+#!/bin/bash 
+read line;
+printf "%.3f" $(echo "scale = 4; $line" | bc);
+
+
+read N 
+read x 
+read y 
+read z
+read v 
+a=$(( $x + $y + $z + $v ))
+b=$(($a/$N))
+printf "%.3f" $(echo "scale = 5; $b" | bc);
+
+=============================================================
+
+Q2.  Given N integers, compute their average correct to three decimal places.
+
+Input Format
+The first line contains an integer, N.
+N lines follow, each containing a single integer.
+
+#!/bin/bash 
+
+read N 
+x=0
+for (( i=0;i<=$N;i++ ));   					# i=0 not $n stupid
+do 
+    read a
+    x=$(( $x + $a ));
+done
+printf "%.3f\n" `echo "$x / $N" | bc -l`
+
+=============================================================
+
+Q3. Print the characters from thirteenth position to the end.
+
+cut -c 13- $1>a 
+cat a
+
+=============================================================
+
+Q4. In this challenge, we practice using the head command to display the first n characters of a text file.
+
+Display the first 20 characters of an input file.
+
+head -c20 $1>a
+cat a 
+
+=============================================================
+
+Q5. In a given fragment of text, replace all sequences of multiple spaces with just one space.
+
+tr -s '  ' $1>a 
+cat a
+
+eg. echo "Welcome To GeeksforGeeks" | tr [:space:] '\t'
+o/p: Welcome    To    GeeksforGeeks
+
+eg. $ echo "Welcome    To    GeeksforGeeks" | tr -s [:space:] ' '
+o/p: Welcome To GeeksforGeeks
+
+=============================================================
+ Q.  You are given a file of text,which contains temperature information about American cities, in TSV (tab-separated) format. The first column is the name of the city and the next four columns are the average temperature in the months of Jan, Feb, March and April (see the sample input). Rearrange the rows of the table in descending order of the values for the average temperature in January.
+ 
+ sort -n -k2 -r -t $'\t' 
+ 
+eg : 
+sort -b: Ignore blanks at the start of the line.
+sort -r: Reverse the sorting order.
+sort -o: Specify the output file.
+sort -n: Use the numerical value to sort.
+sort -M: Sort as per the calendar month specified.
+sort -u: Suppress lines that repeat an earlier key.
+sort -k POS1, POS2: Specify a key to do the sorting. POS1 and POS2 are optional parameters and are used to indicate the starting field and the ending field indices. Without POS2, only the field specified by POS1 is used. Each POS is specified as “F.C” where F represents the field index, and C represents the character index from the start of the field.
+sort -t SEP: Use the provided separator to identify the fields
+
+=============================================================
+
+Q.  Given a text file, count the number of times each line repeats itself (only consider consecutive repetions). Display the count and the line, separated by a space. There shouldn't be leading or trailing spaces. Please note that the uniq -c command by itself will generate the output in a different format.
+
+This time, compare consecutive lines in a case insensitive manner. So, if a line X is followed by case variants, the output should count all of them as the same (but display only the form X in the second column).
+
+So, as you might observe in the case below: aa, AA and Aa are all counted as instances of 'aa'.
+
+uniq -c -i|cut -c 7-
+
+=============================================================
+
+http://www.theunixschool.com/2012/07/10-examples-of-paste-command-usage-in.html
+
+=============================================================
+
+https://www.thegeekstuff.com/2009/03/15-practical-unix-grep-command-examples/
+
+=============================================================
+
+Q Given a text file, which will be piped to your command through STDIN, use grep to display all those lines which contain any of the following words in them:
+the
+that
+then
+those
+The search should not be sensitive to case. Display only those lines of an input file, which contain the required words.
+
+grep -iw -e 'the' -e 'then' -e 'that' -e 'those'
+OR
+grep -Eiw 'th(e|en|at|ose)'
+
+=============================================================
+
+https://www.grymoire.com/Unix/Regular.html#TOC
+
+https://www.grymoire.com/Unix/sed.html
+
+https://www.thegeekstuff.com/2010/06/bash-array-tutorial/
+
+
+
+=============================================================
+
+Q Given a list of countries, each on a new line, your task is to read them into an array and then display the entire array, with a space between each of the countries' names.
+
+Recommended References
+Here's a great tutorial tutorial with useful examples related to arrays in Bash.
+
+Input Format
+
+A list of country names. The only characters present in the country names will be upper or lower case characters and hyphens.
+
+Output Format
+
+Display the entire array of country names, with a space between each of them.
+
+Sample Input
+
+Namibia
+Nauru
+Nepal
+Netherlands
+NewZealand
+Nicaragua
+Niger
+Nigeria
+NorthKorea
+Norway
+Sample Output
+
+Namibia Nauru Nepal Netherlands NewZealand Nicaragua Niger Nigeria NorthKorea Norway
+
+i=0
+while read line
+do 
+    country[$i]=$line
+    ((i+=1))					#brackets are very important, dont forget!
+done 
+echo ${country[@]}
+
+==================================================================================================
+
+echo ${country[@]/*a*/}
+
+to remove all countries having a in its name.
+
+==================================================================================================
+
+Q Given a list of countries, each on a new line, your task is to read them into an array. Then, concatenate the array with itself (twice) - so that you have a total of three repetitions of the original array - and then display the entire concatenated array, with a space between each of the countries' names.
+
+Recommended References
+Here's a great tutorial tutorial with useful examples related to arrays in Bash.
+
+Input Format
+
+A list of country names. The only characters present in the country names will be upper or lower case characters and hyphens.
+
+Output Format
+
+Display the entire concatenated array, with a space between each of them.
+
+Sample Input
+
+Namibia
+Nauru
+Nepal
+Netherlands
+NewZealand
+Nicaragua
+Niger
+Nigeria
+NorthKorea
+Norway
+
+A. i=0
+while read line || [ -n "$line" ]			# -n line is imp else wont read last line of input
+do
+    arr[$i]=$line 
+    (( i+=1 ))
+done 
+ay=("${arr[@]}")
+aay=("${arr[@]}")
+arrayaay=("${arr[@]}" "${ay[@]}" "${aay[@]}")
+echo ${arrayaay[@]}
+		OR
+triple=("${arr[@]}" "${arr[@]}" "${arr[@]}")
+echo ${triple[@]}
+
+******** https://stackoverflow.com/questions/12916352/shell-script-read-missing-last-line
+when norway is not present in output  **********
+
+============================================================
+
+Q  You are given a list of countries, each on a new line. Your task is to read them into an array and then transform them in the following way:
+The first capital letter (if present) in each element of the array should be replaced with a dot ('.'). Then, display the entire array with a space between each country's names.
+
+while read line
+do
+    array[$i]=$line
+    ((i++))
+done 
+echo ${array[@]/#[A-Z]/.}
+     or
+echo $(sed "s/[A-Z]/\./")
+
+================================================================
+Q Lonely integer:
+	There are  integers in an array . All but one integer occur in pairs. Your task is to find the number that occurs only once.
+
+Input Format
+
+The first line of the input contains an integer , indicating the number of integers. The next line contains  space-separated integers that form the array .
+3
+1 1 2
+o/p: 2
+
+
+read a
+arr=($(cat)) 
+echo "${arr[@]}" | tr ' ' '\n'|sort|uniq -u
+
+================================================================
+
